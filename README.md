@@ -1,5 +1,9 @@
 # hero-workhorse
 
+<p align="center">
+  <img src="assets/hero.png" width="128" alt="hero-workhorse — copy-paste AI agent blocks for .NET + Angular">
+</p>
+
 A pragmatic, copy-paste AI harness: self-contained building blocks for adding LLM agents to real projects. Not a framework, not a package — blocks you **copy into a project and own** (shadcn-style).
 
 - Each block is a handful of files with minimal dependencies and its own README (**What / Files / Dependencies / Usage / Pairs with**).
