@@ -20,4 +20,7 @@
   <Folder Name="/samples/sql-agent/api/">
     <Project Path="samples/sql-agent/api/SqlAgent.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HeroWorkhorse.Tests/HeroWorkhorse.Tests.csproj" />
+  </Folder>
 </Solution>
