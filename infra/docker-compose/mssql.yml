@@ -1,0 +1,22 @@
+# SQL Server 2022 for local dev. Merge with your own compose file:
+#   docker compose -f docker-compose.yml -f mssql.yml up -d
+# Change the password; even for dev, don't reuse it anywhere.
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "DevPassw0rd!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'DevPassw0rd!' -C -Q 'SELECT 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mssql-data:

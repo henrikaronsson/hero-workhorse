@@ -1,0 +1,23 @@
+# Ollama in a container for zero-cost local models.
+# Pull a model after startup:  docker compose exec ollama ollama pull gpt-oss:20b
+# On Windows/macOS a host install of Ollama usually gets better GPU access; then skip this
+# and point the app at http://localhost:11434 directly.
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    # Uncomment for NVIDIA GPU support (requires nvidia-container-toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  ollama-data:

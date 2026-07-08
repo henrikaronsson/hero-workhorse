@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\dotnet\agent-loop\HeroWorkhorse.AgentLoop.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\sql-tools\HeroWorkhorse.SqlTools.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\streaming\HeroWorkhorse.Streaming.csproj" />
+    <ProjectReference Include="..\..\..\dotnet\conversation-store\HeroWorkhorse.ConversationStore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OllamaSharp" Version="5.4.25" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

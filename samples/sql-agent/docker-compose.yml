@@ -1,0 +1,35 @@
+# SQL Server + one-shot seed job for the sql-agent sample.
+# Dev-only credentials; the API and Angular dev server run on the host:
+#   docker compose up -d
+#   dotnet run --project api
+#   npm start (in ui/)
+# See infra/docker-compose/ for optional pieces (Ollama in a container, API in a container).
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "DevPassw0rd!"
+    ports:
+      - "14330:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'DevPassw0rd!' -C -Q 'SELECT 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mssql-seed:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      mssql:
+        condition: service_healthy
+    volumes:
+      - ./db/seed.sql:/seed.sql:ro
+    entrypoint: ["/opt/mssql-tools18/bin/sqlcmd", "-S", "mssql", "-U", "sa", "-P", "DevPassw0rd!", "-C", "-i", "/seed.sql"]
+    restart: "no"
+
+volumes:
+  mssql-data:

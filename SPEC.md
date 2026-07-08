@@ -31,6 +31,7 @@ hero-workhorse/
 ├── infra/                   # Bicep snippets + docker-compose pieces
 ├── recipes/                 # Short guides: "wire block X + Y into an app"
 ├── samples/
+│   ├── smoke-test/          # Console harness: agent-loop + one toy tool against local Ollama
 │   └── sql-agent/           # End-to-end: .NET host + Angular UI, agent answering DB questions
 └── README.md                # Index of all blocks, philosophy, how to copy a block
 ```
@@ -42,24 +43,24 @@ hero-workhorse/
 - Built on **Microsoft.Extensions.AI** (`IChatClient`, `AIFunctionFactory`) — do NOT hand-roll a provider abstraction. Providers (Azure OpenAI, Anthropic, Ollama) are just `IChatClient` implementations chosen via appsettings.
 - The block's own value is the loop + policies: max steps, timeout, cancellation, optional cost/token budget.
 - Emits a stream of events (`TextDelta`, `ToolCallStarted`, `ToolResult`, `Completed`, `Error`) consumable by both the streaming block and logging.
-- ~2–4 files. **[OPEN]** exact event model shape — pick something that serializes cleanly to the Angular client.
+- ~2–4 files. **[DECIDED]** event model: sealed record hierarchy with a System.Text.Json `type` discriminator (`text-delta`, `tool-call-started`, ...), mirrored 1:1 by a TypeScript union in `angular/chat`. A host-emitted `ConversationStarted` event carries new conversation ids to the client.
 - Note: M.E.AI uses System.Text.Json for tool schemas. That's fine at the framework boundary; consuming projects may use Newtonsoft.Json in their own layers.
 
 ### dotnet/sql-tools
 
 - `GetSchemaTool`: lists tables/columns/types.
 - `QueryTool`: executes **SELECT only** — validate/parse before execution, enforce row limit and timeout, use a dedicated read-only connection string.
-- SQL Server first. **[OPEN]** Postgres via the same interface if cheap to add; Cosmos as a separate optional tool (SQL API).
+- SQL Server first. **[DECIDED]** SQL Server only in v1 (SELECT-only enforced by parsing with ScriptDom); Postgres/Cosmos were not cheap enough to add — noted as future work in the block README.
 
 ### dotnet/conversation-store
 
 - Interface + SQL Server implementation for persisting conversations/messages. In-memory fallback for dev.
-- **[OPEN]** schema design — keep it minimal (conversations, messages, maybe tool-call payloads as JSON columns).
+- **[DECIDED]** schema: `Conversations` (Id, Title, CreatedAt) + `Messages` (Id, ConversationId, Role, Content, ToolCallsJson, CreatedAt). Plain SqlClient, no EF; tables auto-created via `EnsureCreatedAsync()`.
 
 ### dotnet/streaming
 
 - Minimal API endpoint: `POST /agents/{name}/chat`, streaming agent events to the client.
-- Default to **SSE** for simplicity; note in README how to swap to SignalR. **[OPEN]** if SignalR turns out simpler with the Angular block, choose that instead.
+- Default to **SSE** for simplicity; note in README how to swap to SignalR. **[DECIDED]** SSE won: the stream is one-directional, .NET 10 has `TypedResults.ServerSentEvents` built in, and the Angular side only needs `fetch` + a stream reader (no EventSource — it can't POST).
 
 ### angular/chat + angular/tool-trace
 
@@ -69,7 +70,7 @@ hero-workhorse/
 
 ### prompts/
 
-- Markdown files with proven system prompts (e.g. SQL agent prompt with schema-injection placeholder). **[OPEN]** grows organically.
+- Markdown files with proven system prompts (e.g. SQL agent prompt with schema-injection placeholder). Grows organically; starts with `sql-agent.md`.
 
 ### infra/
 
@@ -99,3 +100,7 @@ Multi-agent orchestration, vector index/RAG, auth (samples run behind your own g
 4. `conversation-store`, `infra/`, polish READMEs and recipes.
 
 Start with step 1, get it running, then iterate. Improve the spec as you go — update this file when reality wins.
+
+## Status (2026-07-08)
+
+All four steps built and verified: smoke test passes against local Ollama (`gpt-oss:20b`), and the sql-agent sample answers DB questions end-to-end with streamed text, visible tool traces, and conversation persistence (in-memory by default, SQL Server behind a config flag). Providers: OllamaSharp as the default `IChatClient`; Azure OpenAI swap documented in `recipes/`.

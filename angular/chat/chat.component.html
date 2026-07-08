@@ -1,0 +1,38 @@
+<div class="chat">
+  <div class="chat__messages">
+    @if (turns().length === 0) {
+      <p class="chat__empty">No messages yet — ask something to get started.</p>
+    }
+    @for (turn of turns(); track $index) {
+      <div class="chat__turn" [class.chat__turn--user]="turn.role === 'user'">
+        <div class="chat__bubble" [class.chat__bubble--user]="turn.role === 'user'">
+          @if (turn.role === 'assistant' && !turn.text && !turn.error) {
+            <span class="chat__thinking">thinking…</span>
+          } @else {
+            {{ turn.text }}
+          }
+          @if (turn.error) {
+            <div class="chat__error">{{ turn.error }}</div>
+          }
+        </div>
+        @if (turn.role === 'assistant') {
+          <hw-tool-trace [toolCalls]="turn.toolCalls" />
+        }
+      </div>
+    }
+  </div>
+
+  <form class="chat__composer" (submit)="$event.preventDefault(); send()">
+    <input
+      class="chat__input"
+      type="text"
+      [placeholder]="placeholder()"
+      [value]="draft()"
+      (input)="draft.set($any($event.target).value)"
+      [disabled]="busy()"
+    />
+    <button class="chat__send" type="submit" [disabled]="busy() || !draft().trim()">
+      {{ busy() ? '…' : 'Send' }}
+    </button>
+  </form>
+</div>

@@ -1,0 +1,31 @@
+@if (toolCalls().length > 0) {
+  <div class="tool-trace">
+    <button type="button" class="tool-trace__toggle" (click)="toggle()">
+      <span class="tool-trace__chevron" [class.tool-trace__chevron--open]="expanded()">&#9656;</span>
+      {{ toolCalls().length }} tool call{{ toolCalls().length === 1 ? '' : 's' }}
+    </button>
+
+    @if (expanded()) {
+      <ol class="tool-trace__list">
+        @for (call of toolCalls(); track call.callId) {
+          <li class="tool-trace__item" [class.tool-trace__item--error]="call.isError">
+            <div class="tool-trace__name">
+              {{ call.name }}
+              @if (call.resultJson === undefined) {
+                <span class="tool-trace__running">running…</span>
+              } @else if (call.isError) {
+                <span class="tool-trace__error-badge">error</span>
+              }
+            </div>
+            <div class="tool-trace__label">arguments</div>
+            <pre class="tool-trace__json">{{ prettyJson(call.argumentsJson) }}</pre>
+            @if (call.resultJson !== undefined) {
+              <div class="tool-trace__label">result</div>
+              <pre class="tool-trace__json">{{ prettyJson(call.resultJson) }}</pre>
+            }
+          </li>
+        }
+      </ol>
+    }
+  </div>
+}

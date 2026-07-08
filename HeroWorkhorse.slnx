@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/dotnet/" />
+  <Folder Name="/dotnet/agent-loop/">
+    <Project Path="dotnet/agent-loop/HeroWorkhorse.AgentLoop.csproj" />
+  </Folder>
+  <Folder Name="/dotnet/conversation-store/">
+    <Project Path="dotnet/conversation-store/HeroWorkhorse.ConversationStore.csproj" />
+  </Folder>
+  <Folder Name="/dotnet/sql-tools/">
+    <Project Path="dotnet/sql-tools/HeroWorkhorse.SqlTools.csproj" />
+  </Folder>
+  <Folder Name="/dotnet/streaming/">
+    <Project Path="dotnet/streaming/HeroWorkhorse.Streaming.csproj" />
+  </Folder>
+  <Folder Name="/samples/" />
+  <Folder Name="/samples/smoke-test/">
+    <Project Path="samples/smoke-test/SmokeTest.csproj" />
+  </Folder>
+  <Folder Name="/samples/sql-agent/" />
+  <Folder Name="/samples/sql-agent/api/">
+    <Project Path="samples/sql-agent/api/SqlAgent.Api.csproj" />
+  </Folder>
+</Solution>
