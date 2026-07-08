@@ -10,6 +10,17 @@ A pragmatic, copy-paste AI harness: self-contained building blocks for adding LL
 - No registry, no versioning, no breaking changes. Copy it, modify it, it's yours.
 - Target stack: Angular 20+, .NET 10, Docker, Azure, SQL Server.
 
+## What this is (and isn't)
+
+This is infrastructure for an agent **inside a product you ship** — an NPC, a SQL assistant, an in-app chatbot. It is **not** a coding assistant, and not a framework you depend on.
+
+The LLM provider is a **swappable deployment choice**, never baked into a block: every block talks to `Microsoft.Extensions.AI`'s `IChatClient`. So you can:
+
+- **Develop free and offline** against a local model (Ollama) — good for iteration, privacy, and avoiding per-token bills.
+- **Switch to a hosted model** (Azure OpenAI, etc.) for production quality with **no code change** — just swap the `IChatClient` in DI. See [swap Ollama for Azure OpenAI](recipes/swap-ollama-for-azure-openai.md).
+
+Local models are cheaper and private but slower and less capable; hosted models are the opposite. Same harness either way.
+
 ## Quick start
 
 Fastest way to see an agent run, fully local and free:
