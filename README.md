@@ -10,6 +10,17 @@ A pragmatic, copy-paste AI harness: self-contained building blocks for adding LL
 - No registry, no versioning, no breaking changes. Copy it, modify it, it's yours.
 - Target stack: Angular 20+, .NET 10, Docker, Azure, SQL Server.
 
+## Quick start
+
+Fastest way to see an agent run, fully local and free:
+
+```bash
+ollama pull gpt-oss:20b
+dotnet run --project samples/smoke-test
+```
+
+This runs the `agent-loop` block against a local Ollama model with one toy tool and prints every agent event. It prints `SMOKE TEST PASSED` when the model called the tool, streamed text, and completed cleanly. See [samples/smoke-test](samples/smoke-test/README.md).
+
 ## Blocks
 
 | Block | What it gives you |
