@@ -1,25 +1,15 @@
 # hero-workhorse
 
 <p align="center">
-  <img src="assets/hero.png" width="128" alt="hero-workhorse — copy-paste AI agent blocks for .NET + Angular">
+  <img src="assets/hero.png" width="128" alt="hero-workhorse — copy-paste AI agent blocks for .NET + Angular and more ...">
 </p>
 
-A pragmatic, copy-paste AI harness: self-contained building blocks for adding LLM agents to real projects. Not a framework, not a package — blocks you **copy into a project and own** (shadcn-style).
+A pragmatic, copy-paste AI toolbox, self-contained building blocks for adding LLM agents to real projects. Not a framework, not a package — just useful blocks to copy into a project
 
 - Each block is a handful of files with minimal dependencies and its own README (**What / Files / Dependencies / Usage / Pairs with**).
 - No registry, no versioning, no breaking changes. Copy it, modify it, it's yours.
-- Target stack: Angular 20+, .NET 10, Docker, Azure, SQL Server.
+- Som of the target stack: Angular 20+, .NET 10, Docker, Azure, Azure Sql Db, Postgresql. etc.
 
-## What this is (and isn't)
-
-This is infrastructure for an agent **inside a product you ship** — an NPC, a SQL assistant, an in-app chatbot. It is **not** a coding assistant, and not a framework you depend on.
-
-The LLM provider is a **swappable deployment choice**, never baked into a block: every block talks to `Microsoft.Extensions.AI`'s `IChatClient`. So you can:
-
-- **Develop free and offline** against a local model (Ollama) — good for iteration, privacy, and avoiding per-token bills.
-- **Switch to a hosted model** (Azure OpenAI, etc.) for production quality with **no code change** — just swap the `IChatClient` in DI. See [swap Ollama for Azure OpenAI](recipes/swap-ollama-for-azure-openai.md).
-
-Local models are cheaper and private but slower and less capable; hosted models are the opposite. Same harness either way.
 
 ## Quick start
 
@@ -30,7 +20,7 @@ ollama pull gpt-oss:20b
 dotnet run --project samples/smoke-test
 ```
 
-This runs the `agent-loop` block against a local Ollama model with one toy tool and prints every agent event. It prints `SMOKE TEST PASSED` when the model called the tool, streamed text, and completed cleanly. See [samples/smoke-test](samples/smoke-test/README.md).
+This runs the `agent-loop` block against a local Ollama model and prints every agent event. It makes the model roll a die and then use that unpredictable result to pick which city's weather to look up — a dependent, multi-step chain that only works if an AI is genuinely reasoning in the loop. Prints `SMOKE TEST PASSED` when that chain completes cleanly. See [samples/smoke-test](samples/smoke-test/README.md).
 
 ## Blocks
 
@@ -56,7 +46,7 @@ There is nothing to install from here — the repo's solution and sample exist o
 
 ## See it run
 
-[`samples/sql-agent`](samples/sql-agent/README.md) wires everything end-to-end: a .NET host and Angular UI where an agent answers questions about a seeded demo database, with live-streamed answers and visible tool traces. Runs fully locally (Ollama + dockerized SQL Server), no cloud keys. [`samples/smoke-test`](samples/smoke-test) is a minimal console harness for the agent loop.
+[`samples/sql-agent`](samples/sql-agent/README.md) wires everything end-to-end: a .NET host and Angular UI where an agent answers questions about a seeded demo database, with live-streamed answers and visible tool traces. Runs fully locally (Ollama + dockerized SQL Server), no cloud keys. [`samples/smoke-test`](samples/smoke-test) is a minimal console harness that proves the agent loop with a multi-step, dice-driven tool chain.
 
 ## Conventions
 
@@ -64,6 +54,4 @@ There is nothing to install from here — the repo's solution and sample exist o
 - Secrets: user secrets locally, Key Vault + Managed Identity on Azure. Never in appsettings (the sample's dockerized dev credentials are the one pragmatic exception).
 - Providers are `IChatClient` implementations chosen in DI — blocks never talk to a specific LLM vendor.
 
-## Non-goals (for now)
 
-Multi-agent orchestration, vector index/RAG, auth (run the samples behind your own gateway), package publishing.

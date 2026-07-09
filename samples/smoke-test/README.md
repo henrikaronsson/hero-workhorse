@@ -1,6 +1,6 @@
 # samples/smoke-test
 
-Minimal console harness for `dotnet/agent-loop`: one toy `get_weather` tool against a local Ollama model, printing every agent event. Exits 0 and prints `SMOKE TEST PASSED` when the model called the tool, streamed text, and completed cleanly.
+Minimal console harness for `dotnet/agent-loop`, printing every agent event. The "Oracle of Questionable Travel" persona rolls a `roll_dice` die, uses the (unpredictable) result to pick a destination, then calls `get_weather` for that place and pronounces your fate. That dependent chain — a second tool call built on a random first result — is the point: it can only happen if an AI actually read the roll and reasoned about the next move, so a pass means the model genuinely drove the loop rather than echoing a canned answer. Exits 0 and prints `SMOKE TEST PASSED` when the model rolled the die, checked the weather, ran a multi-step loop, streamed text, and completed cleanly.
 
 ## Prerequisites
 
