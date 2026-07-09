@@ -4,11 +4,11 @@
   <img src="assets/hero.png" width="128" alt="hero-workhorse — copy-paste AI agent blocks for .NET + Angular and more ...">
 </p>
 
-A pragmatic, copy-paste AI toolbox, self-contained building blocks for adding LLM agents to real projects. Not a framework, not a package — just useful blocks to copy into a project
+A pragmatic, copy-paste AI toolbox, self-contained building blocks for adding LLM agents to real projects. Not a framework, not a package — just useful blocks to copy into a project.
 
 - Each block is a handful of files with minimal dependencies and its own README (**What / Files / Dependencies / Usage / Pairs with**).
 - No registry, no versioning, no breaking changes. Copy it, modify it, it's yours.
-- Som of the target stack: Angular 20+, .NET 10, Docker, Azure, Azure Sql Db, Postgresql. etc.
+- Some of the target stack: Angular 20+, .NET 10, Docker, Azure, Azure SQL DB, PostgreSQL, etc.
 
 
 ## Quick start
